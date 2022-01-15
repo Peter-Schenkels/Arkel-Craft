@@ -5,19 +5,15 @@ using UnityEngine;
 public class BlockDestroy : MonoBehaviour
 {
     // Start is called before the first frame update
-    public WorldGeneration world;
+    bool isDown = false;
+    BlockCollider component;
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    void FixedUpdate()
+    void Update()
     {
         // Bit shift the index of the layer (8) to get a bit mask
         int layerMask = 1 << 8;
@@ -28,15 +24,29 @@ public class BlockDestroy : MonoBehaviour
 
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward));
+        if (Input.GetMouseButtonDown(0) && !isDown)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log("Did Hit");
+            isDown = true;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 5f, layerMask))
+            {
+                if (hit.collider.gameObject.TryGetComponent<BlockCollider>(out component))
+                {
+                    Debug.Log(transform.position);
+                    Debug.Log(hit.point);
+
+                    component.gameObject.transform.GetComponent<WorldGeneration>().DestroyBlock(hit.point);
+
+                    component.DestroyBlock();
+                    Debug.Log("=============");
+                }
+            }
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-            Debug.Log("Did not Hit");
+            isDown = false;
         }
+
+
     }
 }

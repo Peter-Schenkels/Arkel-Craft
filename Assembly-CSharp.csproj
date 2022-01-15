@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{69A6A8D7-4B6E-0B3B-944C-25BA1392FB38}</ProjectGuid>
+    <ProjectGuid>{450B3E3E-F8CC-F4AC-CDEF-E4916696E633}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -54,10 +54,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\BlockDestroy.cs" />
+    <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\WorldGeneration.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\FirstPersonController.cs" />
-    <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\BlockDestroy.cs" />
+    <Compile Include="Assets\Scripts\BlockCollider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
