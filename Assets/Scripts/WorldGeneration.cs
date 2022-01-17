@@ -38,10 +38,12 @@ public class WorldGeneration : MonoBehaviour
         vertices = new List<Vector3>();
         triangles = new List<int>();
         uvs = new List<Vector2>();
-        chunk = new Chunk(BlockCollisionPrefab, this.transform.position, this.gameObject);
-        CreateShape();
+        chunk = new Chunk(this.transform.position, this.gameObject);
         meshCollider = GetComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
+        meshCollider.convex = true;
+        meshCollider.convex = false; 
+        CreateShape();
     }
 
 
@@ -132,18 +134,24 @@ public class WorldGeneration : MonoBehaviour
     }
 
 
+    public void AddBlock(Vector3 position)
+    {
+        position -= gameObject.transform.position;
+        ByteVector3 converted = new ByteVector3((byte)position.x, (byte)position.y, (byte)position.z);
+        BlockData newBlock = new BlockData(converted, BlockType.STONE);
+        chunk.AddBlock(newBlock);
+        clear();
+        CreateShape();
+
+    }
+
     public void DestroyBlock(Vector3 position)
     {
-        ByteVector3 converted = new ByteVector3((byte)(Mathf.RoundToInt(100 * position.x) / 100), (byte)(Mathf.RoundToInt(100 * position.y) / 100), (byte)(Mathf.RoundToInt(100 * position.z) / 100));
-        Debug.Log(converted.x);
-        Debug.Log(converted.y);
-        Debug.Log(converted.z);
         position -= gameObject.transform.position;
-        converted = new ByteVector3((byte)(int)(Mathf.Round(100 * position.x) / 100), (byte)(int)(Mathf.Round(100 * position.y) / 100), (byte)(int)(Mathf.Round(100 * position.z) / 100));
+        ByteVector3 converted = new ByteVector3((byte)position.x, (byte)position.y, (byte)position.z);
         chunk.DestroyBlock(converted);
         clear();
         CreateShape();
-        reloadMeshCollider();
     }
 
 
@@ -187,9 +195,6 @@ public class WorldGeneration : MonoBehaviour
         public List<int> triangles;
         public List<Vector2> uvs;
 
-        GameObject CollisionPrefab;
-        public List<GameObject> blockCollisionsPositions;
-
         public void Generate()
         {
             blocks = new Dictionary<ByteVector3, BlockData>();
@@ -201,7 +206,7 @@ public class WorldGeneration : MonoBehaviour
                 {
                     for (byte z = 0; z < sizeZ; z++)
                     {
-                        if(y == 8 && x == 8 && z == 8)
+                        if (y == 8 && x == 8 && z == 8)
                         {
                             continue;
                         }
@@ -223,15 +228,13 @@ public class WorldGeneration : MonoBehaviour
             }
         }
 
-        public Chunk(GameObject BlockCollisionPrefab, Vector3 position, GameObject parent)
+        public Chunk(Vector3 position, GameObject parent)
         {
             this.position = position;
             this.parent = parent;
-            CollisionPrefab = BlockCollisionPrefab;
             vertices = new List<Vector3>();
             triangles = new List<int>();
             uvs = new List<Vector2>();
-            blockCollisionsPositions = new List<GameObject>();
             clear();
             Generate();
             update();
@@ -242,9 +245,7 @@ public class WorldGeneration : MonoBehaviour
             vertices.Clear();
             triangles.Clear();
             uvs.Clear();
-            blockCollisionsPositions.Clear();
         }
-
 
         bool update()
         {
@@ -302,14 +303,6 @@ public class WorldGeneration : MonoBehaviour
                     Block newBlock = new Block(visableSides, new Vector3(block.Value.position.x, block.Value.position.y, block.Value.position.z), textureIndex, ref sideNr);
                     newBlock.AddBlockToMesh(vertices, triangles, uvs);
                     newBlock = null;
-                    if (visableSides.Count != 0)
-                    {
-                        GameObject collision = Instantiate(CollisionPrefab);
-                        collision.transform.position = (new Vector3(block.Value.position.x, block.Value.position.y, block.Value.position.z)) + position;
-                        collision.transform.name = "CollisionBock";
-                        blockCollisionsPositions.Add(collision);
-                    }
-
                     visableSides = null;
                     textureIndex = null;
                 }
@@ -325,6 +318,17 @@ public class WorldGeneration : MonoBehaviour
             outputTriangles.AddRange(triangles);
             outputUvs.AddRange(uvs);
         }
+        public void AddBlock(BlockData newBlock)
+        {
+            if(!blocks.ContainsKey(newBlock.position))
+            {
+                blocks.Add(newBlock.position, newBlock);
+                changed = true;
+                update();
+            }
+
+        }
+
 
         public void DestroyBlock(ByteVector3 position)
         {
@@ -335,13 +339,6 @@ public class WorldGeneration : MonoBehaviour
 
     }
 
-
-    void reloadMeshCollider()
-    {
-        DestroyImmediate(this.GetComponent<MeshCollider>());
-        var collider = this.gameObject.AddComponent<MeshCollider>();
-        collider.sharedMesh = mesh;
-    }
 
 
 
@@ -483,18 +480,18 @@ public class WorldGeneration : MonoBehaviour
             }
             triangles = new int[]
             {
-                0 + SideNr * 4, 
-                1 + SideNr * 4, 
-                2 + SideNr * 4, 
-                1 + SideNr * 4, 
-                3 + SideNr * 4, 
+                0 + SideNr * 4,
+                1 + SideNr * 4,
+                2 + SideNr * 4,
+                1 + SideNr * 4,
+                3 + SideNr * 4,
                 2 + SideNr * 4
             };
 
             uvs = getUv(textureIndex);
         }
 
-        public void AddSideToMesh(List<Vector3>outputVertices, List<int> outputTriangles, List<Vector2> outputUvs)
+        public void AddSideToMesh(List<Vector3> outputVertices, List<int> outputTriangles, List<Vector2> outputUvs)
         {
             outputVertices.AddRange(vertices);
             outputTriangles.AddRange(triangles);
@@ -506,16 +503,14 @@ public class WorldGeneration : MonoBehaviour
 
     void CreateShape()
     {
+        meshCollider.convex = true;
         chunk.AddChunkToMesh(vertices, triangles, uvs);
         mesh.Clear();
         mesh.SetVertices(vertices);
         mesh.SetTriangles(triangles, 0);
         mesh.SetUVs(0, uvs);
         mesh.RecalculateNormals();
+        meshCollider.convex = false;
     }
 
-    // Update is called once per frame
-    public void Update()
-    {
-    }
 }
