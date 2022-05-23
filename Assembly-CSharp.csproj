@@ -54,11 +54,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <Compile Include="Assets\Scripts\BAckup.cs" />
     <Compile Include="Assets\Scripts\BlockDestroy.cs" />
     <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\WorldGeneration.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\BAckup.cs" />
+    <Compile Include="Assets\Scripts\ChunkManager.cs" />
+    <Compile Include="Assets\Scripts\Block.cs" />
+    <Compile Include="Assets\Scripts\BlockSide.cs" />
+    <Compile Include="Assets\Scripts\Chunk.cs" />
+    <Compile Include="Assets\Scripts\ChunkNeighbors.cs" />
+    <Compile Include="Assets\Scripts\BlockData.cs" />
+    <Compile Include="Assets\Scripts\ByteVector3.cs" />
+    <Compile Include="Assets\Scripts\TextureIndex.cs" />
+    <Compile Include="Assets\Scripts\TextureLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
