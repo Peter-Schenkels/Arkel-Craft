@@ -14,5 +14,8 @@ This is still a work in progress and only supports the bare minimum of being an 
 * Water
 * Caves
 
+### Bugs
+* Visable block meshes dissapear on chunk borders
+
 ### Download
 For windows 64/32bit [here](https://drive.google.com/file/d/12M44rQbalaA6IiXTXEPlcq4J0fQ-7HyO/view?usp=sharing).
