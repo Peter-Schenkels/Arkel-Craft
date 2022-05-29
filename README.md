@@ -6,6 +6,7 @@ This is still a work in progress and only supports the bare minimum of being an 
 
 
 ### Backlog (Priority high to low)
+* Greedy mesh generation
 * Chunk generation
 * Faster mesh generating
 * Multiple placeable blocks
