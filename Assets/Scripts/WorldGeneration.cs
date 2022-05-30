@@ -14,13 +14,11 @@ namespace Assets.Scripts
         public MeshCollider meshCollider;
         public Chunk chunk;
         public GameObject chunkSpawner;
+        public ChunkManager chunkManager;
 
         List<Vector3> vertices;
         List<int> triangles;
         List<Vector2> uvs;
-        Vector2 indexSize;
-
-        public ChunkManager chunkManager;
 
         public void Init()
         {
@@ -31,7 +29,6 @@ namespace Assets.Scripts
             triangles = new List<int>();
             uvs = new List<Vector2>();
             chunk = new Chunk(this.transform.position, this.gameObject);
-            chunk.neighbours.chunkManager = chunkManager;
             meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;
             meshCollider.convex = true;
@@ -58,7 +55,7 @@ namespace Assets.Scripts
         {
             position -= gameObject.transform.position;
             ByteVector3 converted = new ByteVector3((byte)position.x, (byte)position.y, (byte)position.z);
-            BlockData newBlock = new BlockData(converted, BlockType.STONE);
+            BlockData newBlock = new BlockData(converted, BlockType.STONE, new ByteVector3(0,0,0));
             chunk.AddBlock(newBlock);
             clear();
             CreateShape();

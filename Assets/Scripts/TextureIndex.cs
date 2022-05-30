@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    class TextureIndex
+    public class TextureIndex
     {
         public Vector2 side;
         public Vector2 top;

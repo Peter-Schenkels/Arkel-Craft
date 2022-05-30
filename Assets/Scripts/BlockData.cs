@@ -18,11 +18,13 @@ namespace Assets.Scripts
     {
         public ByteVector3 position;
         public BlockType type;
+        public ByteVector3 chunkBorder;
 
-        public BlockData(ByteVector3 position, BlockType type)
+        public BlockData(ByteVector3 position, BlockType type, ByteVector3 chunkBorder)
         {
             this.position = position;
             this.type = type;
+            this.chunkBorder = chunkBorder;
         }
     }
 }

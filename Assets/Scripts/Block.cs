@@ -48,6 +48,7 @@ namespace Assets.Scripts
             sideNr += visableSides.Count;
         }
 
+        
         public void AddBlockToMesh(List<Vector3> outputVertices, List<int> outputTriangles, List<Vector2> outputUvs)
         {
             outputVertices.AddRange(vertices);

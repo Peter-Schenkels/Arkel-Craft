@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -13,11 +14,21 @@ namespace Assets.Scripts
         public byte z;
 
         int ID;
+
         public ByteVector3(byte x, byte y, byte z)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+
+            ID = x * 31 + y * 37 + z * 41;
+        }
+
+        public ByteVector3(Vector3 input)
+        {
+            this.x = (byte)input.x;
+            this.y = (byte)input.y;
+            this.z = (byte)input.z;
 
             ID = x * 31 + y * 37 + z * 41;
         }
